@@ -11,7 +11,6 @@
     const countits = document.getElementById("countits")
     const clear = document.getElementById("clear-cart")
     const checkout = document.getElementById("checkout")
-    const imgPack = document.getElementById("img-pack")
 
     affichage();
     function addToCart(name, price) {
@@ -75,7 +74,10 @@
     }
     function ft_checkout() {
         checkout.addEventListener("click", ()=> {
-            get = cart.concat(Price,countiti)
+            get = {
+                cart: [...cart],
+                countiti:[...countiti],
+            }
              cart.length = 0;
                 countiti.length = 0;
                 Price.length = 0;
@@ -93,5 +95,5 @@
         })
     }
     ft_checkout();
-    pack = JSON.parse(localStorage.getItem("get"))
-    console.log(btn-pack)
+     console.log(get)
+    
