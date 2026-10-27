@@ -1,96 +1,97 @@
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let Price = JSON.parse(localStorage.getItem("Price")) || [];
+    let countiti = JSON.parse(localStorage.getItem("countiti")) || [];
+    let get = [];
+    let totalPrice = 0;
 
-let total = 0;
-let cartProducts = [];
 
-let savedCart = localStorage.getItem("myCart");
+    const buttons = document.querySelectorAll(".btn-add")
+    const text = document.getElementById("cart-items")
+    const total = document.getElementById("cart-total")
+    const countits = document.getElementById("countits")
+    const clear = document.getElementById("clear-cart")
+    const checkout = document.getElementById("checkout")
+    const imgPack = document.getElementById("img-pack")
 
-if (savedCart != null) {
-    cartProducts = JSON.parse(savedCart);
-}
-
-function showCart() {
-    let cart = document.getElementById("cart-items");
-    cart.innerHTML = "";
-    total = 0;
-
-    if (cartProducts.length == 0) {
-        cart.innerHTML = "<p>Your cart is empty.</p>";
+    affichage();
+    function addToCart(name, price) {
+        let check = cart.includes(name)
+        if (check == false) {
+            cart.push(name)
+            countiti.push(1)
+        }
+        else{
+            let i = cart.indexOf(name)
+            countiti[i]++
+        }
+        Price.push(price)
+        savedata ();
     }
 
-    for (let i = 0; i < cartProducts.length; i++) {
-        let product = document.createElement("div");
-        product.className = "flex justify-between items-center gap-4";
-
-        let text = document.createElement("p");
-        text.textContent = cartProducts[i].name + " - $" + cartProducts[i].price.toFixed(2);
-
-        let removeButton = document.createElement("button");
-        removeButton.textContent = "Remove";
-        removeButton.className = "border border-amber-300 rounded px-3 py-1";
-
-        removeButton.onclick = function() {
-            cartProducts.splice(i, 1);
-            localStorage.setItem("myCart", JSON.stringify(cartProducts));
-            showCart();
-        };
-
-        product.appendChild(text);
-        product.appendChild(removeButton);
-        cart.appendChild(product);
-
-        total = total + cartProducts[i].price;
+    function Total() {
+        totalPrice = 0;
+        for (let i = 0; i < Price.length; i++) {
+            totalPrice += Price[i];
+        }
+        return totalPrice
     }
 
-    document.getElementById("cart-total").textContent = total.toFixed(2);
-}
-
-function addToCart(price, name) {
-    let product = {
-        name: name,
-        price: price
-    };
-
-    cartProducts.push(product);
-
-    localStorage.setItem("myCart", JSON.stringify(cartProducts));
-
-    showCart();
-}
-
-let buttons = document.querySelectorAll(".btn-add");
-
-buttons[0].onclick = function() {
-    addToCart(2.99, "Beginner Pack");
-};
-
-buttons[1].onclick = function() {
-    addToCart(7.99, "Summoning of the Legends");
-};
-
-buttons[2].onclick = function() {
-    addToCart(5.99, "Dark Summoning");
-};
-
-buttons[3].onclick = function() {
-    addToCart(4.99, "Lucky Pack");
-};
-
-document.getElementById("clear-cart").onclick = function() {
-    cartProducts = [];
-    localStorage.removeItem("myCart");
-    showCart();
-};
-
-document.getElementById("checkout").onclick = function() {
-    if (cartProducts.length == 0) {
-        alert("Your cart is empty!");
-    } else {
-        alert("Order confirmed! Total: $" + total.toFixed(2));
-
-        cartProducts = [];
-        localStorage.removeItem("myCart");
-        showCart();
+    function affichage() {
+        text.innerHTML = "+" + cart.join('<br> +')
+        countits.innerHTML = countiti.join(' <br>')
+        total.textContent = Total()
     }
-};
 
-showCart();
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            addToCart(button.dataset.name, Number(button.dataset.price))
+            affichage()
+        })
+    })
+    function clearCart(){
+        clear.addEventListener("click", ()=> {
+                cart.length = 0;
+                countiti.length = 0;
+                Price.length = 0;
+                savedata();
+                text.innerHTML = "your cart is empty"
+                countits.innerHTML = ""  
+                total.textContent = 0;
+                
+    }
+    )}
+    clearCart();
+    
+    function savedata(){
+        localStorage.setItem("cart", JSON.stringify(cart))
+        localStorage.setItem("Price", JSON.stringify(Price))
+        localStorage.setItem("countiti", JSON.stringify(countiti))
+        localStorage.setItem("get", JSON.stringify(get));
+
+    }
+    function affichdat(){
+        let data  = JSON.parse(localStorage.getItem("cart"))
+        console.log(data)
+    }
+    function ft_checkout() {
+        checkout.addEventListener("click", ()=> {
+            get = cart.concat(Price,countiti)
+             cart.length = 0;
+                countiti.length = 0;
+                Price.length = 0;
+                savedata();
+                text.innerHTML = "your cart is empty"
+                countits.innerHTML = ""  
+                total.textContent = 0;  
+                if(get.length == 0)
+                {
+                    alert(" your cart is emptey ? ")
+                }
+                else{
+                    alert(" your checkout is done ")
+                }
+        })
+    }
+    ft_checkout();
+    pack = JSON.parse(localStorage.getItem("get"))
+    console.log(btn-pack)
